@@ -11,6 +11,8 @@ import SwiftData
 struct ItemDetailView: View {
     var anItem: Item
     
+    @State private var displayImageData: Data?
+    
     private let columnsGrid = [
         GridItem(.flexible(minimum: 50), spacing: 0),
         GridItem(.flexible(minimum: 50), spacing: 0),
@@ -38,9 +40,12 @@ struct ItemDetailView: View {
                 }
                 .padding([.leading, .top])
                 
-                Image("sample")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
+                // we need the front check first to check if it can be assigned (not nil)
+                if let displayImageData = anItem.displayImage, let uiImage = UIImage(data: displayImageData) {
+                        Image(uiImage: uiImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                }
                 
                 VStack {
                     if (anItem.seenAt != nil) {
@@ -63,32 +68,26 @@ struct ItemDetailView: View {
                 
                 VStack {
                     HStack {
-                        Text("Images")
+                        Text("Gallery")
                             .font(.title2)
                         Spacer()
                     }
-                    .padding([.bottom, .top, .leading])
                     
-    //            https://stackoverflow.com/questions/63026130/swiftui-configure-lazyvgrid-with-no-spacing
-                    LazyVGrid(
-                        columns: columnsGrid,
-                        alignment: .leading,
-                        spacing: 0) {
-                            Image("twinlake")
-                                .resizable()
-                                .scaledToFit()
-                            Image("twinlake")
-                                .resizable()
-                                .scaledToFit()
-                            Image("twinlake")
-                                .resizable()
-                                .scaledToFit()
-                            Image("twinlake")
-                                .resizable()
-                                .scaledToFit()
+                    VStack {
+                        let itemGalleryImagesData: [Data] = anItem.galleryImages
+                        
+                        if (itemGalleryImagesData.count > 0) {
+                            ForEach(0...itemGalleryImagesData.count - 1, id: \.self) { index in
+                                if let uiImage = UIImage(data: itemGalleryImagesData[index]) {
+                                    Image(uiImage: uiImage)
+                                        .resizable()
+                                        .scaledToFit()
+                                }
+                            }
                         }
-                    
+                    }
                 }
+                .padding()
             }
             .navigationTitle(anItem.name)
         .navigationBarTitleDisplayMode(.automatic)

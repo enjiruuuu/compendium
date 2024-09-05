@@ -13,53 +13,51 @@ struct ListView: View {
     @State private var showForm = false
     
     var body: some View {
-        NavigationStack() {
-            HStack {
-                Text("Logs")
-                    .font(.largeTitle)
-                    .multilineTextAlignment(.leading)
-                    .bold()
-                Spacer()
-            }
-            .padding([.leading])
-            
-            List(items) { item in
-                NavigationLink {
-                    ItemDetailView(anItem: item)
-                } label: {
+        VStack {
+            NavigationStack() {
+                VStack {
                     HStack {
-                        // replace with item image
-                        Image(systemName: "heart.fill")
-                            .foregroundColor(.pink)
-                        Text(item.name)
-                        
+                        Text("Logs")
+                            .font(.largeTitle)
+                            .multilineTextAlignment(.leading)
+                            .bold()
                         Spacer()
-                        
-                        if (item.seenAt != nil) {
-                            Image(systemName: "heart.fill")
-                                .foregroundColor(.pink)
+                    }
+                    .padding([.leading])
+                    
+                    
+                    VStack {
+                        ForEach(items, id: \.self) { item in
+                            NavigationLink {
+                                ItemDetailView(anItem: item)
+                            } label: {
+                                ItemRow(
+                                    itemName: item.name,
+                                    seen: item.seenAt != nil,
+                                    displayImage: item.displayImage)
+                            }
                         }
-                        else {
-                            Image(systemName: "heart")
-                                .foregroundColor(.pink)
-                        }
+                    }
+                    .padding()
+                    
+                    Spacer()
+                    
+                    HStack {
+                        Spacer()
+                        NavigationLink(destination: AddFormView())
+                            {
+                                Image(systemName: "plus.circle.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 40, height: 40)
+                            }
+                            .padding([.trailing], 40)
                     }
                 }
+                .background(Color(.systemGray6))
             }
-            
-            HStack {
-                Spacer()
-                NavigationLink(destination: AddFormView())
-                    {
-                        Image(systemName: "plus.circle.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 40, height: 40)
-                    }
-                    .padding([.trailing], 40)
-            }
+            .navigationTitle("Home")
         }
-        .navigationTitle("Home")
     }
 }
 

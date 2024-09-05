@@ -16,6 +16,14 @@ class Item {
     let seenAt: String?
     let seenOn: Date?
     
+    // store externally so it wont be stored directly in swiftdata and become slow when there's too much data
+    
+    @Attribute(.externalStorage)
+    var displayImage: Data?
+    
+    @Attribute(.externalStorage)
+    var galleryImages: [Data] = []
+    
     init(aName: String, aSeenAt: String?, aSeenOn: Date?) {
         self.id = Int(Date().timeIntervalSince1970)
         self.name = aName

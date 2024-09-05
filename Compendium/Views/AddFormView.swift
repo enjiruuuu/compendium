@@ -22,10 +22,10 @@ struct AddFormView: View {
     @State private var newSeenOn = Date.now
     
     @State private var newDisplayPhotosPickerItem: PhotosPickerItem?
-    @State private var newDisplayImage: Image?
+    @State private var newDisplayPhotoData: Data?
     
     @State private var newGalleryPhotosPickerItem: [PhotosPickerItem] = []
-    @State private var newGalleryImages: [Image] = []
+    @State private var newGalleryPhotoData: [Data] = []
     
     var body: some View {
         NavigationStack {
@@ -77,16 +77,16 @@ struct AddFormView: View {
                                         PhotosPicker(selection: $newDisplayPhotosPickerItem, matching: .not(.videos)) {
                                             Image(systemName: "pencil.line")
                                         }
-                                        .task(id: newDisplayPhotosPickerItem) {
-                                            newDisplayImage = try? await newDisplayPhotosPickerItem?.loadTransferable(type: Image.self)
-                                        }
                                         
                                         Spacer()
                                     }
                                     
-                                    newDisplayImage?
-                                        .resizable()
-                                        .scaledToFit()
+                                    if let newDisplayPhotoData, let uiImage = UIImage(data: newDisplayPhotoData) {
+                                        Image(uiImage: uiImage)
+                                            .resizable()
+                                            .scaledToFit()
+                                    }
+                                    
                                 }
                                 .padding([.top])
                                 
@@ -99,27 +99,21 @@ struct AddFormView: View {
                                         PhotosPicker(selection: $newGalleryPhotosPickerItem, maxSelectionCount: 6, matching: .not(.videos)) {
                                             Image(systemName: "pencil.line")
                                         }
-                                        .task(id: newGalleryPhotosPickerItem) {
-                                            newGalleryImages = []
-                                            for newImage in newGalleryPhotosPickerItem {
-                                                let image = try? await newImage.loadTransferable(type: Image.self
-                                                )
-                                                newGalleryImages.append(image!)
-                                            }
-                                        }
                                         
                                         Spacer()
                                     }
                                     
                                     ScrollView(.horizontal) {
                                         HStack {
-                                            if (newGalleryImages.count > 0) {
-                                                ForEach(0...newGalleryImages.count - 1, id: \.self) { index in
-                                                    newGalleryImages[index]
-                                                        .resizable()
-                                                        .frame(width: 150, height: 150)
-                                                        .scaledToFill()
+                                            if (newGalleryPhotoData.count > 0) {
+                                                ForEach(0...newGalleryPhotoData.count - 1, id: \.self) { index in
+                                                    if let uiImage = UIImage(data: newGalleryPhotoData[index]) {
+                                                        Image(uiImage: uiImage)
+                                                            .resizable()
+                                                            .frame(width: 150, height: 150)
+                                                            .scaledToFit()
                                                     }
+                                                }
                                             }
                                         }
                                     }
@@ -146,6 +140,9 @@ struct AddFormView: View {
                             aSeenAt: isSeenAtFilled ? newSeenAt : nil,
                             aSeenOn: isSeenAtFilled ? newSeenOn : nil
                         )
+                        newItem.displayImage = newDisplayPhotoData
+                        newItem.galleryImages = newGalleryPhotoData
+                        
                         context.insert(newItem)
                         
                         newName = ""
@@ -160,6 +157,19 @@ struct AddFormView: View {
                 .buttonStyle(.borderedProminent)
             }
             .padding([.bottom, .top])
+        }
+        .task(id: newDisplayPhotosPickerItem) {
+            if let data = try? await newDisplayPhotosPickerItem?.loadTransferable(type: Data.self) {
+                newDisplayPhotoData = data
+            }
+        }
+        .task(id: newGalleryPhotosPickerItem) {
+            newGalleryPhotoData = []
+            for newImage in newGalleryPhotosPickerItem {
+                if let data = try? await newImage.loadTransferable(type: Data.self) {
+                    newGalleryPhotoData.append(data)
+                }
+            }
         }
     }
 }
