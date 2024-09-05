@@ -6,66 +6,101 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ItemDetailView: View {
-    private let threeColumnGrid = [
-        GridItem(.flexible(minimum: 40), spacing: 0),
-        GridItem(.flexible(minimum: 40), spacing: 0),
-        GridItem(.flexible(minimum: 40), spacing: 0),
+    var anItem: Item
+    
+    private let columnsGrid = [
+        GridItem(.flexible(minimum: 50), spacing: 0),
+        GridItem(.flexible(minimum: 50), spacing: 0),
     ]
     
     var body: some View {
-        VStack {
-            HStack {
-                Text("Thresher Shark")
-                    .font(.title)
-                Image(systemName: "heart.fill")
-                    .foregroundColor(.pink)
-            }
-            .padding([.bottom])
-            
-            
-            HStack {
-                Text("Spotted in:")
-                Text("Sydney")
-                Spacer()
-            }
-            
-            Divider()
-            
-            HStack {
-                Text("Spotted on:")
-                Text("12/12/12")
-                Spacer()
-            }
-            .padding([.bottom])
-    
-            
+        ScrollView {
             VStack {
                 HStack {
-                    Text("Images")
-                        .font(.title2)
+                    Text(anItem.name)
+                        .font(.title)
+                        .multilineTextAlignment(.leading)
+                        .bold()
+                    
+                    if (anItem.seenAt != nil) {
+                        Image(systemName: "heart.fill")
+                            .foregroundColor(.pink)
+                    }
+                    else {
+                        Image(systemName: "heart")
+                            .foregroundColor(.pink)
+                    }
+                    
                     Spacer()
                 }
-                .padding([.bottom])
+                .padding([.leading, .top])
                 
-//            https://stackoverflow.com/questions/63026130/swiftui-configure-lazyvgrid-with-no-spacing
-                LazyVGrid(
-                    columns: threeColumnGrid,
-                    alignment: .leading,
-                    spacing: 0) {
-                        Text("hi")
-                        Text("hi")
-                        Text("hi")
-                        Text("hi")
+                Image("sample")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                
+                VStack {
+                    if (anItem.seenAt != nil) {
+                        HStack {
+                            Text("Spotted in:")
+                            Text(anItem.seenAt!)
+                            Spacer()
+                        }.padding([.top])
+                        
+                        Divider()
+                        
+                        HStack {
+                            Text("Spotted on:")
+                            Text(anItem.seenOn!, format: .dateTime.month(.wide).day().year())
+                            Spacer()
+                        }
                     }
+                }
+                .padding([.leading, .trailing])
                 
+                VStack {
+                    HStack {
+                        Text("Images")
+                            .font(.title2)
+                        Spacer()
+                    }
+                    .padding([.bottom, .top, .leading])
+                    
+    //            https://stackoverflow.com/questions/63026130/swiftui-configure-lazyvgrid-with-no-spacing
+                    LazyVGrid(
+                        columns: columnsGrid,
+                        alignment: .leading,
+                        spacing: 0) {
+                            Image("twinlake")
+                                .resizable()
+                                .scaledToFit()
+                            Image("twinlake")
+                                .resizable()
+                                .scaledToFit()
+                            Image("twinlake")
+                                .resizable()
+                                .scaledToFit()
+                            Image("twinlake")
+                                .resizable()
+                                .scaledToFit()
+                        }
+                    
+                }
             }
+            .navigationTitle(anItem.name)
+        .navigationBarTitleDisplayMode(.automatic)
         }
-        .padding()
     }
 }
 
 #Preview {
-    ItemDetailView()
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: Item.self, configurations: config)
+
+    let item = Item(aName: "test", aSeenAt: "test", aSeenOn: Date.now)
+    return ItemDetailView(anItem: item)
+            .modelContainer(container)
 }

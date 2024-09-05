@@ -14,6 +14,8 @@
 		9015364D2C8777F400ABDF10 /* ItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9015364C2C8777F400ABDF10 /* ItemRow.swift */; };
 		9015364F2C87790B00ABDF10 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9015364E2C87790B00ABDF10 /* ListView.swift */; };
 		901536512C87793200ABDF10 /* ItemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901536502C87793200ABDF10 /* ItemDetailView.swift */; };
+		9035F08F2C889D9D003CADA3 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9035F08E2C889D9D003CADA3 /* Item.swift */; };
+		90B4E5F52C89E7AE00304C02 /* AddFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B4E5F42C89E7AE00304C02 /* AddFormView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +27,8 @@
 		9015364C2C8777F400ABDF10 /* ItemRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemRow.swift; sourceTree = "<group>"; };
 		9015364E2C87790B00ABDF10 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		901536502C87793200ABDF10 /* ItemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailView.swift; sourceTree = "<group>"; };
+		9035F08E2C889D9D003CADA3 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		90B4E5F42C89E7AE00304C02 /* AddFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFormView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +63,7 @@
 			children = (
 				9015363E2C8777BC00ABDF10 /* CompendiumApp.swift */,
 				901536402C8777BC00ABDF10 /* ContentView.swift */,
+				9035F08E2C889D9D003CADA3 /* Item.swift */,
 				901536532C87845500ABDF10 /* Helpers */,
 				901536522C87844B00ABDF10 /* Views */,
 				901536422C8777BC00ABDF10 /* Assets.xcassets */,
@@ -78,6 +83,7 @@
 		901536522C87844B00ABDF10 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				90B4E5F42C89E7AE00304C02 /* AddFormView.swift */,
 				9015364E2C87790B00ABDF10 /* ListView.swift */,
 				901536502C87793200ABDF10 /* ItemDetailView.swift */,
 			);
@@ -165,7 +171,9 @@
 				901536512C87793200ABDF10 /* ItemDetailView.swift in Sources */,
 				9015364F2C87790B00ABDF10 /* ListView.swift in Sources */,
 				9015364D2C8777F400ABDF10 /* ItemRow.swift in Sources */,
+				90B4E5F52C89E7AE00304C02 /* AddFormView.swift in Sources */,
 				901536412C8777BC00ABDF10 /* ContentView.swift in Sources */,
+				9035F08F2C889D9D003CADA3 /* Item.swift in Sources */,
 				9015363F2C8777BC00ABDF10 /* CompendiumApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

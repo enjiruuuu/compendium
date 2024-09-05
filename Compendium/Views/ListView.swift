@@ -6,25 +6,64 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ListView: View {
+    @Query private var items: [Item]
+    @State private var showForm = false
+    
     var body: some View {
-        NavigationSplitView {
-            List {
+        NavigationStack() {
+            HStack {
+                Text("Logs")
+                    .font(.largeTitle)
+                    .multilineTextAlignment(.leading)
+                    .bold()
+                Spacer()
+            }
+            .padding([.leading])
+            
+            List(items) { item in
                 NavigationLink {
-                    ItemDetailView()
+                    ItemDetailView(anItem: item)
                 } label: {
-                    Image(systemName: "heart.fill")
-                        .foregroundColor(.pink)
-                    Text("Thresher Shark")
+                    HStack {
+                        // replace with item image
+                        Image(systemName: "heart.fill")
+                            .foregroundColor(.pink)
+                        Text(item.name)
+                        
+                        Spacer()
+                        
+                        if (item.seenAt != nil) {
+                            Image(systemName: "heart.fill")
+                                .foregroundColor(.pink)
+                        }
+                        else {
+                            Image(systemName: "heart")
+                                .foregroundColor(.pink)
+                        }
+                    }
                 }
             }
-        } detail: {
-            Text("Test")
+            
+            HStack {
+                Spacer()
+                NavigationLink(destination: AddFormView())
+                    {
+                        Image(systemName: "plus.circle.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 40, height: 40)
+                    }
+                    .padding([.trailing], 40)
+            }
         }
+        .navigationTitle("Home")
     }
 }
 
 #Preview {
     ListView()
+        .modelContainer(for: Item.self, inMemory: true)
 }
