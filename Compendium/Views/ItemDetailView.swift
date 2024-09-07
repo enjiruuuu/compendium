@@ -11,6 +11,9 @@ import SwiftData
 struct ItemDetailView: View {
     var anItem: Item
     
+    @Environment(\.modelContext) private var context
+    @Environment(\.dismiss) private var dismiss
+    
     @State private var displayImageData: Data?
     
     private let columnsGrid = [
@@ -88,6 +91,15 @@ struct ItemDetailView: View {
                     }
                 }
                 .padding()
+                
+                Button(role: .destructive) {
+                    context.delete(anItem)
+                    dismiss()
+                    
+                } label: {
+                    Text("Delete entry")
+                }
+
             }
             .navigationTitle(anItem.name)
         .navigationBarTitleDisplayMode(.automatic)
