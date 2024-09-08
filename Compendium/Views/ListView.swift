@@ -33,7 +33,7 @@ struct ListView: View {
                             } label: {
                                 ItemRow(
                                     itemName: item.name,
-                                    seen: item.seenAt != nil,
+                                    seen: item.isSeen,
                                     displayImage: item.displayImage)
                             }
                         }

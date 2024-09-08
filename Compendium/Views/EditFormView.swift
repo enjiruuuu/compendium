@@ -9,12 +9,14 @@ import SwiftUI
 import SwiftData
 import PhotosUI
 
-struct AddFormView: View {
+struct EditFormView: View {
     
     // SwiftData requires a ModelContext to save new items.
     // provides a connection between the view and the model container so that you can fetch, insert, and delete items in the container.
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
+    
+    @Binding var item: Item
     
     @State private var newName = ""
     @State private var markAsSeen = false
@@ -31,28 +33,57 @@ struct AddFormView: View {
         NavigationStack {
             ScrollView {
                 VStack {
+                    VStack {
+                        HStack {
+                            Text("Edit log")
+                                .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                                .bold()
+                            Spacer()
+                        }
+                        HStack {
+                            Text("Changes are saved automatically")
+                            Spacer()
+                        }
+                    }
+                    .padding([.bottom])
+                    
                     HStack {
                         Text("Name")
-                        TextField("", text: $newName)
+                        TextField("", text: $item.name)
                             .textFieldStyle(.roundedBorder)
                     }
                     
                     Divider().padding([.top, .bottom])
                     
-                    Toggle(isOn: $markAsSeen, label: {
+                    Toggle(isOn: $item.isSeen) {
                         Text("Mark as seen")
-                    })
+                    }
                     
-                    if (markAsSeen) {
+                    if (item.isSeen) {
                         VStack {
                             HStack {
                                 Text("Seen at")
-                                TextField("", text: $newSeenAt)
-                                    .textFieldStyle(.roundedBorder)
+//                                TextField("", text: $item.seenAt)
+//                                    .textFieldStyle(.roundedBorder)
+                                TextField("", text: Binding(
+                                            get: { item.seenAt ?? "" },  // If `name` is nil, show an empty string
+                                            set: { newValue in
+                                                item.seenAt = newValue.isEmpty ? "" : newValue
+                                            }
+                                        ))
+                                        .padding()
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
                             }.padding([.top])
                             
                             HStack {
-                                DatePicker("Seen on", selection: $newSeenOn, in: ...Date.now, displayedComponents: .date).fixedSize().frame(alignment: .leading)
+                                DatePicker("Seen on", selection: Binding(
+                                    get: { item.seenOn ?? Date.now },  // Use a default date if `seenOn` is nil
+                                    set: { newValue in
+                                        item.seenOn = newValue  // Update the `seenOn` date when the user selects a new date
+                                    }
+                                ), in: ...Date.now, displayedComponents: .date)
+                                .fixedSize()
+                                .frame(alignment: .leading)
                                 
                                 Spacer()
                             }
@@ -81,7 +112,7 @@ struct AddFormView: View {
                                         Spacer()
                                     }
                                     
-                                    if let newDisplayPhotoData, let uiImage = UIImage(data: newDisplayPhotoData) {
+                                    if let displayImage = item.displayImage, let uiImage = UIImage(data: displayImage) {
                                         Image(uiImage: uiImage)
                                             .resizable()
                                             .scaledToFit()
@@ -105,9 +136,10 @@ struct AddFormView: View {
                                     
                                     ScrollView(.horizontal) {
                                         HStack {
-                                            if (newGalleryPhotoData.count > 0) {
-                                                ForEach(0...newGalleryPhotoData.count - 1, id: \.self) { index in
-                                                    if let uiImage = UIImage(data: newGalleryPhotoData[index]) {
+                                            let galleryImages = item.galleryImages
+                                            if (galleryImages.count > 0) {
+                                                ForEach(0...galleryImages.count - 1, id: \.self) { index in
+                                                    if let uiImage = UIImage(data: galleryImages[index]) {
                                                         Image(uiImage: uiImage)
                                                             .resizable()
                                                             .frame(width: 150, height: 150)
@@ -128,27 +160,12 @@ struct AddFormView: View {
             
             VStack {
                 Button {
-                    if (newName.trimmingCharacters(in: .whitespaces).count > 0) {
-                     
-                        let newItem = Item(
-                            aName: newName,
-                            aIsSeen: markAsSeen,
-                            aSeenAt: markAsSeen ? newSeenAt : nil,
-                            aSeenOn: markAsSeen ? newSeenOn : nil
-                        )
-                        newItem.displayImage = newDisplayPhotoData
-                        newItem.galleryImages = newGalleryPhotoData
-                        
-                        context.insert(newItem)
-                        
-                        newName = ""
-                        markAsSeen = false
-                        newSeenAt = ""
-                        newSeenOn = Date.now
+                    if (item.name.trimmingCharacters(in: .whitespaces).count > 0) {
+                        try? context.save()
                         dismiss()
                     }
                 } label: {
-                    Text("Save")
+                    Text("Back")
                 }
                 .buttonStyle(.borderedProminent)
             }
@@ -156,14 +173,16 @@ struct AddFormView: View {
         }
         .task(id: newDisplayPhotosPickerItem) {
             if let data = try? await newDisplayPhotosPickerItem?.loadTransferable(type: Data.self) {
-                newDisplayPhotoData = data
+                item.displayImage = data
             }
         }
         .task(id: newGalleryPhotosPickerItem) {
-            newGalleryPhotoData = []
+            if (newGalleryPhotosPickerItem.count > 0) {
+                item.galleryImages = []
+            }
             for newImage in newGalleryPhotosPickerItem {
                 if let data = try? await newImage.loadTransferable(type: Data.self) {
-                    newGalleryPhotoData.append(data)
+                    item.galleryImages.append(data)
                 }
             }
         }
@@ -171,5 +190,10 @@ struct AddFormView: View {
 }
 
 #Preview {
-    AddFormView()
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: Item.self, configurations: config)
+
+    @State var item = Item(aName: "test", aIsSeen: true, aSeenAt: "test seen at", aSeenOn: Date.now)
+    return EditFormView(item: $item)
+            .modelContainer(container)
 }

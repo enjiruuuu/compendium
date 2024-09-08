@@ -15,6 +15,7 @@
 		9015364F2C87790B00ABDF10 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9015364E2C87790B00ABDF10 /* ListView.swift */; };
 		901536512C87793200ABDF10 /* ItemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901536502C87793200ABDF10 /* ItemDetailView.swift */; };
 		9035F08F2C889D9D003CADA3 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9035F08E2C889D9D003CADA3 /* Item.swift */; };
+		908003482C8DF1C80033D1D7 /* EditFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 908003472C8DF1C80033D1D7 /* EditFormView.swift */; };
 		90B4E5F52C89E7AE00304C02 /* AddFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B4E5F42C89E7AE00304C02 /* AddFormView.swift */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +29,7 @@
 		9015364E2C87790B00ABDF10 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		901536502C87793200ABDF10 /* ItemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailView.swift; sourceTree = "<group>"; };
 		9035F08E2C889D9D003CADA3 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		908003472C8DF1C80033D1D7 /* EditFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFormView.swift; sourceTree = "<group>"; };
 		90B4E5F42C89E7AE00304C02 /* AddFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFormView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -86,6 +88,7 @@
 				90B4E5F42C89E7AE00304C02 /* AddFormView.swift */,
 				9015364E2C87790B00ABDF10 /* ListView.swift */,
 				901536502C87793200ABDF10 /* ItemDetailView.swift */,
+				908003472C8DF1C80033D1D7 /* EditFormView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -170,6 +173,7 @@
 			files = (
 				901536512C87793200ABDF10 /* ItemDetailView.swift in Sources */,
 				9015364F2C87790B00ABDF10 /* ListView.swift in Sources */,
+				908003482C8DF1C80033D1D7 /* EditFormView.swift in Sources */,
 				9015364D2C8777F400ABDF10 /* ItemRow.swift in Sources */,
 				90B4E5F52C89E7AE00304C02 /* AddFormView.swift in Sources */,
 				901536412C8777BC00ABDF10 /* ContentView.swift in Sources */,

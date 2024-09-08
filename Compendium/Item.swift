@@ -12,9 +12,10 @@ import SwiftUI
 @Model
 class Item {
     let id: Int
-    let name: String
-    let seenAt: String?
-    let seenOn: Date?
+    var name: String
+    var isSeen: Bool = false
+    var seenAt: String?
+    var seenOn: Date?
     
     // store externally so it wont be stored directly in swiftdata and become slow when there's too much data
     
@@ -24,10 +25,11 @@ class Item {
     @Attribute(.externalStorage)
     var galleryImages: [Data] = []
     
-    init(aName: String, aSeenAt: String?, aSeenOn: Date?) {
+    init(aName: String, aIsSeen: Bool, aSeenAt: String?, aSeenOn: Date?) {
         self.id = Int(Date().timeIntervalSince1970)
         self.name = aName
         self.seenAt = aSeenAt
         self.seenOn = aSeenOn
+        self.isSeen = aIsSeen
     }
 }
