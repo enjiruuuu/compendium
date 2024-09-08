@@ -35,7 +35,7 @@ struct EditFormView: View {
                 VStack {
                     VStack {
                         HStack {
-                            Text("Edit log")
+                            Text("Edit entry")
                                 .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                                 .bold()
                             Spacer()

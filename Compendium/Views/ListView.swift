@@ -17,13 +17,24 @@ struct ListView: View {
             NavigationStack() {
                 VStack {
                     HStack {
-                        Text("Logs")
+                        Text("Entries")
                             .font(.largeTitle)
                             .multilineTextAlignment(.leading)
                             .bold()
                         Spacer()
                     }
                     .padding([.leading])
+                    
+                    if (items.count < 1) {
+                        VStack {
+                            Spacer()
+                            Text("No entries yet.")
+                                .multilineTextAlignment(.center)
+                            Text("Click the + button at the bottom right to start!")
+                                .multilineTextAlignment(.center)
+                            Spacer()
+                        }
+                    }
                     
                     
                     VStack {
